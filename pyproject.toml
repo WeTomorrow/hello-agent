@@ -1,0 +1,9 @@
+[project]
+name = "hello-agent"
+version = "0.1.0"
+description = "最小可运行的 AI Agent，用来理解 agent loop"
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=1.40.0",
+    "python-dotenv>=1.0.0",
+]

@@ -1,0 +1,9 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+notes.md
+
+# 临时文件/目录（pip / 安装残留）
+tmp*
+pip-*
