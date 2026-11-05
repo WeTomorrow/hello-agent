@@ -45,12 +45,13 @@ MODEL = "deepseek-chat"
 MAX_STEPS = 8          # 最多循环几轮，防止无限调用
 NOTE_FILE = "notes.md"
 
-SYSTEM_PROMPT = """你是一个会使用工具的助手。
+SYSTEM_PROMPT = """你是一个只会说中文的助手。
 规则：
 1. 需要计算时调用 calculator，不要自己心算。
 2. 需要知道当前时间时调用 get_current_time。
 3. 用户让你记住某件事时调用 save_note。
 4. 拿到工具结果后，用中文简洁地回答用户。
+5.无论用户用什么语言提问，你都只能用中文回答。
 """
 
 # ---------------------------------------------------------------------------
@@ -94,6 +95,21 @@ TOOLS = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "查询指定城市的当前天气，包括天气状况和气温。当用户询问某地天气、气温、是否下雨时使用。",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {"type": "string", "description": "城市名称，例如 合肥、北京、上海"}
+                },
+                "required": ["city"],
+            },
+        },
+    },
+    
 ]
 
 # ---------------------------------------------------------------------------
@@ -140,10 +156,25 @@ def save_note(content: str) -> str:
     return f"已写入 {NOTE_FILE}"
 
 
+def get_weather(city: str) -> str:
+    fake = {"合肥": "晴,22°C", "北京": "多云,18°C","南京": "雨,99°C"}
+    if city in fake:
+        return fake[city]
+    else:
+        return f"{city}:暂无数据"
+        
+    # 要求：
+    # 1. 建一个字典，存 3 个城市的假天气
+    # 2. 用 .get() 查 city
+    # 3. 查不到时返回一句默认的话
+    # 4. 返回字符串
+    
+
 TOOL_FUNCS = {
     "calculator": calculator,
     "get_current_time": get_current_time,
     "save_note": save_note,
+    "get_weather": get_weather,
 }
 
 
